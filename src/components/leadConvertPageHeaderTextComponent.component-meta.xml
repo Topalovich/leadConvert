@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexComponent xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>29.0</apiVersion>
+    <description>The text used in the header of the custom Lead Convert page. Fully customizable HTML.</description>
+    <label>leadConvertPageHeaderTextComponent</label>
+</ApexComponent>

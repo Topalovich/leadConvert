@@ -1,0 +1,129 @@
+<!-- This component allows for the core lead converting functionality -->
+
+<apex:component controller="leadConvertCoreComponentController">
+    <!-- This allows for the lookup to Account but hides the text of the selected account name leaving the magnifying glass only -->
+    <style type="text/css">
+        input.hiddenInput {
+            width:0;
+            height:0;
+            border:0;
+            padding:0;
+            margin:0;
+        }
+    </style>
+
+	<!-- This is the attribute that holds the lead to convert -->
+    <apex:attribute name="LeadToConvert" 
+        description="The lead to convert"
+        type="Lead" 
+        assignTo="{!leadConvert}"
+        required="true"/>
+
+    <!-- This attribute is used for the leadConvertController to interact with this component's controller -->
+	<apex:attribute name="thepageController"
+      type="PageControllerBase"
+      assignTo="{!pageController}"
+      required="true"
+      description="The controller for the page." />
+	
+	<!-- Lead Convert section -->    
+    <apex:pageBlockSection id="pblockconvertLead" title="Convert Lead" collapsible="no" columns="1">
+    
+    	<!-- Leads Record Owner -->
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Record Owner" for="recordOwner" />
+            <apex:inputField value="{!contactId.ownerID}" id="recordOwner" />
+        </apex:pageBlockSectionItem>
+        
+        <!-- Checkbox indicating whether to send an email to the owner -->    
+		<apex:pageBlockSectionItem >
+            <apex:outputLabel value="Send Email to the Owner" for="sendOwnerEmail" />
+            <apex:inputCheckbox value="{!sendOwnerEmail}" id="sendOwnerEmail" />
+        </apex:pageBlockSectionItem>
+        
+             
+        <apex:pageBlockSectionItem id="convertLeadAccountBlockSectionItem" >
+        	
+        	<!-- Account Name picklist  -->
+            <apex:outputLabel value="Account Name" for="accountList" />
+            <apex:outputPanel styleClass="requiredInput" id="block">
+                <div class="requiredBlock"></div>
+                <apex:selectList value="{!selectedAccount}" size="1" 
+                    multiselect="false" id="accountList">
+                    
+                    <apex:actionSupport event="onchange" 
+                        action="{!accountChanged}" 
+                        rerender="opportunityName, ViewLink"
+                         />     
+                    <apex:selectOptions value="{!accounts}"/>
+                    
+                </apex:selectList>
+                
+                <!--  Account lookup to add existing accounts to the picklist -->
+                <apex:inputField styleClass="hiddenInput" 
+                value="{!contactId.AccountId}" id="accountId" >
+					
+					<!-- When an account is looked up, it is added to the select list -->                            
+                    <apex:actionSupport event="onchange" 
+                        action="{!accountLookedUp}" 
+                        rerender="accountList, opportunityName, ViewLink"
+                         />
+                        
+                </apex:inputField>
+				
+				<!-- This is a link which shows a view of the selected account in a new pop up window -->                
+                <apex:commandLink id="ViewLink"  value="View"
+                	onclick="javascript:if ('{!selectedAccount}' != 'NEW' && '{!selectedAccount}' != 'NONE' ) {var newWindow = window.open('/{!selectedAccount}/p', 'accountview', 'top=40, left=40,scrollbars=yes, height=450, width=800');newwindow.focus();} else {alert('You can only view existing accounts.');}"
+                />
+                
+            </apex:outputPanel>
+        </apex:pageBlockSectionItem>
+        
+        <!-- Opportunity section -->
+        <apex:pageBlockSectionItem id="oppSection" >
+            
+            <apex:outputPanel id="oppPanel" >
+                <apex:outputLabel value="Opportunity Name" for="opportunityName" />
+            </apex:outputPanel>
+            
+            
+            <apex:outputPanel id="opportunityPanel" layout="block">
+                <apex:outputPanel rendered="{!NOT(doNotCreateOppty)}" styleClass="requiredInput" id="block">
+                <div class="requiredBlock"></div>
+            	
+            	<!-- Opportunity Name -->
+                <apex:inputField required="false" 
+                    value="{!opportunityID.Name}" id="opportunityName"/>
+                </apex:outputPanel>
+            	
+            	<!--  This is only shown if the Do Not Create Opportunity is true -->    
+                <apex:inputText disabled="true" rendered="{!doNotCreateOppty}"  value="{!opportunityID.Name}" id="opportunityNameDisabled"/>
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" />
+                
+                <!-- Checkbox indicating whether to create an Opportunity -->
+                <apex:inputCheckbox value="{!doNotCreateOppty}" id="doNotCreateOppty">
+                    <apex:actionSupport event="onchange" 
+                        
+                        rerender="opportunityPanel"
+                         />
+                </apex:inputCheckbox>
+                Do not create a new opportunity upon conversion.
+            </apex:outputPanel> 
+            </apex:outputPanel>
+        </apex:pageBlockSectionItem>
+        
+        <!-- Converted Status -->
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Converted Status" for="leadStatus" />
+            <apex:outputPanel styleClass="requiredInput" layout="block">
+                <div class="requiredBlock"></div>
+                <apex:selectList id="LeadStatusList" size="1" 
+                    value="{!LeadToConvert.Status}" multiselect="false" required="true">
+                    <apex:selectOptions value="{!LeadStatusOption}"/>
+                </apex:selectList> 
+            </apex:outputPanel>
+        </apex:pageBlockSectionItem>
+    </apex:pageBlockSection>
+    
+</apex:component>

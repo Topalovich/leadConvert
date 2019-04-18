@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexComponent xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>29.0</apiVersion>
+    <description>This custom Component contains elements related to the Description field on a newly created Task in the Lead Convert process</description>
+    <label>leadConvertTaskDescriptionComponent</label>
+</ApexComponent>

@@ -1,0 +1,10 @@
+<!-- This text appears at the top of the Lead Convert page. Customize to meet business requirements. -->
+<!-- Questions? Reach out to us @DIChicago or www.dichicago.com -->
+
+<apex:component >
+
+Leads can be converted to accounts, contacts, opportunities, and follow up tasks.<br/>
+You should only convert a lead once you have identified it as qualified.<br/>
+After this lead has been converted, it can no longer be viewed or edited as a lead, but can be viewed in lead reports.<br/><br/>
+
+</apex:component>

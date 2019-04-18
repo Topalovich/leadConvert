@@ -1,0 +1,97 @@
+<!-- This is the custom component for Task Information -->
+<apex:component controller="leadConvertTaskInfoComponentController">
+	<style type="text/css">
+		.ReminderPanelClass .dateFormat {
+            display: none !important;
+        }
+	</style>
+    
+    <!-- This attribute is used for the leadConvertController to interact with this component's controller -->    
+	<apex:attribute name="thepageController"
+		type="PageControllerBase"
+		assignTo="{!pageControllerTask}"
+		required="true"
+		description="The controller for the page."
+	 />
+    
+    <!-- Task Information Section -->  
+	<apex:pageBlockSection title="Task Information" collapsible="no" columns="2">
+		
+		<!-- Task Subject -->
+		<apex:pageBlockSectionItem >
+            <apex:outputLabel value="Subject" for="taskSubject" />
+            <apex:outputPanel styleClass="requiredInput" layout="block">
+                <div class="requiredBlock"></div>
+                <apex:inputField id="taskSubject" value="{!taskId.Subject}"  required="false"/>
+            </apex:outputPanel>
+        </apex:pageBlockSectionItem>
+        
+        <!-- Task Status -->
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Status" for="TaskStatusList" />
+            <apex:outputPanel styleClass="requiredInput" layout="block">
+                <div class="requiredBlock"></div>
+                <apex:selectList id="TaskStatusList" size="1" value="{!taskId.Status}" multiselect="false" required="true">
+                    <apex:selectOptions value="{!TaskStatusOption}"/>
+                </apex:selectList>
+            </apex:outputPanel>
+        </apex:pageBlockSectionItem>
+        
+        <!-- Task Due Date -->
+        <apex:inputField id="taskDueDate" value="{!taskId.ActivityDate}" >
+            <apex:actionSupport event="onchange"  action="{!dueDateChanged}" rerender="ReminderCalendar"/>
+        </apex:inputField>
+         
+		<!-- Task Priority -->
+        <apex:outputLabel value="" />        
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Priority" for="TaskPriorityList" />
+            <apex:outputPanel styleClass="requiredInput" layout="block">
+                <div class="requiredBlock"></div>
+                <apex:selectList id="TaskPriorityList" size="1" value="{!taskId.Priority}" multiselect="false" required="true">
+                    <apex:selectOptions value="{!TaskPriorityOption}"/>
+                </apex:selectList>
+            </apex:outputPanel>
+        </apex:pageBlockSectionItem>
+        
+        <!-- Task Primary Resource (Custom field demonstrating that custom fields can be added to the custom Lead Convert page -->
+        <apex:outputLabel value="" />
+        <apex:inputField id="taskPrimaryResource" value="{!taskId.Primary_Resource__c}" />
+        
+    </apex:pageBlockSection>
+
+	<!-- Task Reminder Section -->    
+    <apex:pageBlockSection id="ReminderBlockSection" title="Task Reminder" collapsible="no" columns="1">
+        
+        <apex:pageBlockSectionItem id="ReminderBlockSectionItem">
+        	
+        	<!-- Task Reminder indicates whether a reminder should be set -->
+            <apex:outputLabel value="Reminder" for="isReminderSet" />
+            <apex:outputPanel id="reminderPanel" styleClass="ReminderPanelClass"  layout="block">
+                <apex:inputField value="{!remCon.taskId.IsReminderSet}" id="isReminderSet">
+                    <apex:actionSupport event="onchange"   rerender="reminderPanel"/>
+                </apex:inputField>
+                
+				<!-- Task Reminder Date (only shown if the Reminder is checked) -->  
+                <apex:inputField rendered="{!remCon.taskId.IsReminderSet}" id="ReminderCalendar" 
+                    value="{!remCon.taskId.ActivityDate}"   
+                >                
+                    <apex:actionSupport event="onchange" 
+                        rerender="ReminderCalendar"/>
+                </apex:inputField>
+                
+                <!-- Task Reminder Date (only shown if the Reminder is unchecked) --> 
+                <apex:inputText rendered="{!NOT(remCon.taskId.IsReminderSet)}" 
+                disabled="true" size="11" value="{!remCon.disabledActivityDate}" />
+                
+				<!-- Task Reminder Time -->                
+                <apex:selectList disabled="{!NOT(remCon.taskId.IsReminderSet)}"  id="ReminderTimeList" size="1" value="{!remCon.reminderTime}" multiselect="false">
+                    <apex:selectOptions value="{!remCon.ReminderTimeOption}"/>
+                </apex:selectList>
+                
+            </apex:outputPanel>
+        </apex:pageBlockSectionItem>
+    </apex:pageBlockSection>
+      
+      
+</apex:component>

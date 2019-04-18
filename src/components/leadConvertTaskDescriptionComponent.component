@@ -1,0 +1,28 @@
+<!-- Custom component for Task Description component -->
+<apex:component controller="leadConvertTaskDescComponentController" >
+    
+    <apex:attribute name="thepageController"
+    type="PageControllerBase"
+    assignTo="{!pageControllerDescription}"
+    required="true"
+    description="The controller for the page." />
+      
+	<apex:pageBlockSection title="Description Information" collapsible="no" columns="1">
+		
+		<!-- Task Description -->
+	    <apex:pageBlockSectionItem >
+	        <apex:outputLabel value="Comments" for="editDesc" />
+	        <apex:inputTextarea id="editDesc" value="{!taskId.Description}" cols="75" rows="6"/>
+	    </apex:pageBlockSectionItem>
+	    
+	    <!-- Checkbox indicating if there will be a notification sent -->
+	    <apex:pageBlockSectionItem >
+	        <apex:outputPanel layout="none">
+	            <apex:inputCheckbox value="{!sendNotificationEmail}"/>
+	            Send Notification Email
+	        </apex:outputPanel> 
+	    </apex:pageBlockSectionItem>
+	    
+    </apex:pageBlockSection>
+    
+</apex:component>

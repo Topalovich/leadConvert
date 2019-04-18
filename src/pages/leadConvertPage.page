@@ -1,0 +1,60 @@
+<!-- This is our page component tag -->
+<!-- We are using the Standard Controller for Lead and a Controller Extension called 'leadConvertController' -->
+
+<apex:page standardController="Lead" extensions="leadConvertController">
+
+<!-- Page section header -->
+
+<apex:sectionHeader title="Convert Lead" subtitle="{!Lead.name}"/>
+
+<!-- Visualforce Component with custom page header text -->
+
+<c:leadConvertPageHeaderTextComponent />
+
+<!-- This form tag must include any fields or buttons used in the Lead Convert operation -->
+ 
+<apex:form id="theForm" >
+
+    <!-- This pageBlock component is a container that includes the visual elements of the Lead Convert page -->
+    <!-- All custom Components should be included within this pageBlock unless you are using more advanced custom styling -->
+
+    <apex:pageBlock mode="edit" id="pageBlock">
+   
+        <!-- This component is used to display error messages on the page -->
+           
+        <apex:pageMessages />
+           
+        <!-- This pageBlockButtons component is where you can add / remove custom buttons from the Lead Convert page -->
+   
+        <apex:pageBlockButtons >
+       
+            <apex:commandButton action="{!convertLead}" value="Convert"/>
+            <apex:commandButton action="{!cancel}" value="Cancel"/>
+               
+        </apex:pageBlockButtons>           
+       
+        <!-- This custom component contains the section & fields specific to converting a Lead to an Account, Contact, and Opportunity -->
+          
+        <c:leadConvertCoreComponent id="leadComp" thepageController="{!this}" LeadToConvert="{!leadToConvert}" rendered="True" />
+
+        <!-- This custom component contains the section & fields specific to creating a new Task on Lead Convert -->
+        <!-- If you would like to hide this section, set the rendered attribute to 'False' -->
+           
+        <c:leadConvertTaskInfoComponent thepageController="{!this}" rendered="true" />
+
+        <!-- This custom component contains the section & Description field specific to the new Task on Lead Convert -->
+        <!-- If you would like to hide this section, set the rendered attribute to 'False' -->
+                
+        <c:leadConvertTaskDescriptionComponent thepageController="{!this}" rendered="true" />
+
+    <!-- This is the closing tag for the pageBlock component -->
+    
+    </apex:pageBlock>
+       
+<!-- This is the closing tag for the form -->
+
+</apex:form>
+   
+<!-- This is the closing tag for the page -->
+    
+</apex:page>

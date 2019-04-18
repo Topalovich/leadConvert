@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexComponent xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>29.0</apiVersion>
+    <description>This custom Component contains the core elements for converting a Lead to an Account, Contact and Opportunity as part of the Lead Convert process</description>
+    <label>leadConvertCoreComponent</label>
+</ApexComponent>
